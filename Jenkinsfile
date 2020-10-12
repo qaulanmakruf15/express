@@ -22,7 +22,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    builderDocker = docker.build("123160087/express-app:dev")
+                    builderDocker = docker.build("123160087/express:dev")
                 }
             }
         }
@@ -72,8 +72,8 @@ pipeline {
                                 transfers: [
                                     sshTransfer(
                                         sourceFiles: 'docker-compose.yaml',
-                                        remoteDirectory: 'express-app',
-                                        execCommand: 'cd express-app && docker-compose up -d',
+                                        remoteDirectory: 'express',
+                                        execCommand: 'cd express && docker-compose up -d',
                                         execTimeout: 120000,
                                     )
                                 ]
@@ -99,8 +99,8 @@ pipeline {
                                 transfers: [
                                     sshTransfer(
                                         sourceFiles: 'docker-compose.yaml',
-                                        remoteDirectory: 'express-app',
-                                        execCommand: 'cd express-app && docker-compose up -d',
+                                        remoteDirectory: 'express',
+                                        execCommand: 'cd express && docker-compose up -d',
                                         execTimeout: 120000,
                                     )
                                 ]
