@@ -94,7 +94,7 @@ pipeline {
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'prod-user',
+                                configName: 'production',
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
