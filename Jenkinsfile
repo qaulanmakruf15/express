@@ -1,12 +1,13 @@
 def builderDocker
+def CommitHash
 
 pipeline {
 
     agent any
 
     parameters {
-        booleanParam(name: 'RUNTEST', defaultValue: true, description: 'Toggle this value from testing')
-        choice(name: 'CICD', choices: ['CI', 'CICD Deployment', 'CICD Production'], description: 'Pick something')
+        booleanParam(name: 'RUNTEST', defaultValue: true, description: 'this value from testing')
+        choice(name: 'CICD', choices: ['CI', 'CICD Server'], description: 'Pick something')
     }
 
     stages {
@@ -22,7 +23,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    builderDocker = docker.build("123160087/express:dev")
+                    CommitHash = sh (script : "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                    builderDocker = docker.build("123160087/express:${CommitHash}")
                 }
             }
         }
@@ -56,10 +58,10 @@ pipeline {
             }
         }
 
-        stage('Deploy on development') {
+        stage('Deploy on server') {
             when {
                 expression {
-                    params.CICD == 'CICD Development' || BRANCH_NAME == 'dev'
+                    params.CICD == 'CICD Server' || BRANCH_NAME == 'main'
                 }
             }
             steps {
@@ -67,40 +69,13 @@ pipeline {
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'Development',
+                                configName: 'dev-server',
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'docker-compose.yaml',
+                                        sourceFiles: 'docker-compose.yml',
                                         remoteDirectory: 'express',
-                                        execCommand: 'cd express && docker-compose up -d',
-                                        execTimeout: 120000,
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                }
-            }
-        }
-        stage('Deploy on production') {
-            when {
-                expression {
-                    params.CICD == 'CICD Production' || BRANCH_NAME == 'prod'
-                }
-            }
-            steps {
-                script {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'Development',
-                                verbose: false,
-                                transfers: [
-                                    sshTransfer(
-                                        sourceFiles: 'docker-compose.yaml',
-                                        remoteDirectory: 'express',
-                                        execCommand: 'cd express && docker-compose up -d',
+                                        execCommand: 'cd express && docker-compose down && docker-compose build --pull && docker-compose up -d',
                                         execTimeout: 120000,
                                     )
                                 ]
