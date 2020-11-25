@@ -12,14 +12,6 @@ pipeline {
 
     stages {
 
-        stage('Build Project') {
-            steps {
-                nodejs("node12") {
-                    sh 'npm install'
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
