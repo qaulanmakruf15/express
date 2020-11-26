@@ -14,7 +14,7 @@ services:
             - DB_HOST=54.152.74.46
             - DB_USER=super
             - DB_PASSWORD=super
-            - DB_NAME=POS
+            - DB_HOST=POS
         deploy:
             resources:
                 limits:
