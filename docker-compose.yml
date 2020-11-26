@@ -26,19 +26,6 @@ services:
                     cpus: '1'
                     memory: 200M    
 
-    postgres:
-        image: postgres
-        container_name: postgres
-        environment:
-            - POSTGRES_USER=super
-            - POSTGRES_PASSWORD=super
-            - POSTGRES_DB=POS
-        ports:
-            - 5432:5432
-        networks: 
-            - deploy
-        volumes:
-            - ./postgres-data:/var/lib/postgresql/data
     redis:
         image: redis
         container_name: redis
