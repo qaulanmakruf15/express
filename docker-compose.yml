@@ -30,8 +30,8 @@ services:
         image: postgres
         container_name: postgres
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_USER=super
+            - POSTGRES_PASSWORD=super
             - POSTGRES_DB=POS
         ports:
             - 5432:5432
