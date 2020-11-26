@@ -11,7 +11,7 @@ services:
         environment: 
             - PORT=3000
             - REDIS_HOST=redis
-            - DB_HOST=postgres
+            - DB_HOST=54.152.74.46
             - DB_USER=super
             - DB_PASSWORD=super
             - DB_NAME=POS
